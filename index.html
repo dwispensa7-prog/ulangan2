@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SMP Negeri 1 KOta Surakarta</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --danger: #dc2626;
+      --danger-bg: #fef2f2;
+      --warning: #d97706;
+      --success: #16a34a;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      /* Mencegah seleksi teks di area portal */
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    input, select {
+      -webkit-user-select: text;
+      -moz-user-select: text;
+      -ms-user-select: text;
+      user-select: text;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Utilitas Tampilan */
+    .hidden {
+      display: none !important;
+    }
+
+    /* ================= HALAMAN LOGIN ================= */
+    #login-screen {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+    }
+
+    .card {
+      background: var(--card);
+      width: 100%;
+      max-width: 440px;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    }
+
+    .card-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .badge-info {
+      display: inline-block;
+      background: #dbeafe;
+      color: var(--primary);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .card-header h1 {
+      font-size: 1.5rem;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+
+    .card-header p {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .form-group {
+      margin-bottom: 1.1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.75rem 0.9rem;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: #fff;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .rules-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      font-size: 0.82rem;
+      color: #475569;
+      margin-bottom: 1.25rem;
+    }
+
+    .rules-box ul {
+      padding-left: 1.2rem;
+      margin-top: 0.35rem;
+    }
+
+    .rules-box li {
+      margin-bottom: 0.25rem;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 0.85rem 1.25rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    .btn:active {
+      transform: scale(0.99);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--text);
+    }
+
+    .error-msg {
+      color: var(--danger);
+      background: var(--danger-bg);
+      padding: 0.65rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid var(--danger);
+    }
+
+    /* ================= HALAMAN UJIAN ================= */
+    #exam-screen {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+    }
+
+    .exam-topbar {
+      background: #0f172a;
+      color: #fff;
+      padding: 0.65rem 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      z-index: 50;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .student-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .student-meta strong {
+      color: #38bdf8;
+    }
+
+    .exam-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .violation-badge {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fbbf24;
+    }
+
+    .violation-badge.danger {
+      background: var(--danger);
+      border-color: #fca5a5;
+      color: #fff;
+      animation: pulse 1s infinite;
+    }
+
+    .btn-sm {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+      border-radius: 6px;
+      width: auto;
+    }
+
+    .iframe-container {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      position: relative;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* ================= MODAL PERINGATAN ================= */
+    .overlay-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      z-index: 9999;
+    }
+
+    .modal-box {
+      background: #fff;
+      max-width: 420px;
+      width: 100%;
+      border-radius: 16px;
+      padding: 1.75rem;
+      text-align: center;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .icon-circle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      font-weight: bold;
+    }
+
+    .icon-warning {
+      background: #fef3c7;
+      color: var(--warning);
+    }
+
+    .icon-lock {
+      background: #fee2e2;
+      color: var(--danger);
+    }
+
+    .modal-box h2 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-box p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
+    }
+
+    /* ================= LAYAR TERKUNCI ================= */
+    #locked-screen {
+      position: fixed;
+      inset: 0;
+      background: #7f1d1d;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      z-index: 10000;
+    }
+
+    .locked-card {
+      background: #fff;
+      color: var(--text);
+      max-width: 440px;
+      width: 100%;
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .log-list {
+      text-align: left;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 0.75rem;
+      margin: 1rem 0;
+      max-height: 120px;
+      overflow-y: auto;
+      font-size: 0.8rem;
+      color: #334155;
+    }
+
+    .teacher-unlock-box {
+      border-top: 1px dashed var(--border);
+      padding-top: 1.25rem;
+      margin-top: 1.25rem;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    @media (max-width: 600px) {
+      .exam-topbar {
+        padding: 0.5rem 0.75rem;
+      }
+      .student-meta {
+        font-size: 0.8rem;
+      }
+      .card {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. HALAMAN LOGIN SISWA -->
+  <main id="login-screen">
+    <div class="card">
+      <div class="card-header">
+        <span class="badge-info">SMP NEGERI 1 KOTA SURAKARTA</span>
+        <h1 id="display-exam-title">Penilaian Formatif</h1>
+        <p>Masukkan identitas dan token ujian untuk memulai</p>
+      </div>
+
+      <div id="login-error" class="error-msg hidden"></div>
+
+      <form id="login-form" autocomplete="off">
+        <div class="form-group">
+          <label for="student-name">Nama Lengkap Siswa</label>
+          <input type="text" id="student-name" placeholder="Contoh: Budi Santoso" required>
+        </div>
+
+        <div class="form-group">
+          <label for="student-class">Kelas</label>
+          <input type="text" id="student-class" placeholder="Contoh: IX A" required>
+        </div>
+
+        <div class="form-group">
+          <label for="exam-token">Token Ujian</label>
+          <input type="password" id="exam-token" placeholder="Masukkan token dari pengawas" required>
+        </div>
+
+        <div class="rules-box">
+          <strong>Peraturan Sistem Pengawas Otomatis:</strong>
+          <ul>
+            <li>Ujian berjalan dalam mode <strong>Layar Penuh (Fullscreen)</strong>.</li>
+            <li>Dilarang berpindah tab, membuka aplikasi lain, atau keluar fullscreen.</li>
+            <li>Batas maksimal pelanggaran adalah <strong><span id="max-v-info">3</span> kali</strong> sebelum ujian terkunci otomatis.</li>
+          </ul>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Mulai Ujian (Layar Penuh)</button>
+      </form>
+    </div>
+  </main>
+
+  <!-- 2. HALAMAN UJIAN (GOOGLE FORM EMBED) -->
+  <section id="exam-screen" class="hidden">
+    <header class="exam-topbar">
+      <div class="student-meta">
+        <span>Peserta: <strong id="header-name">-</strong> (<span id="header-class">-</span>)</span>
+      </div>
+      <div class="exam-controls">
+        <div id="violation-counter" class="violation-badge">
+          Pelanggaran: 0 / 3
+        </div>
+        <button type="button" id="btn-finish" class="btn btn-outline btn-sm" style="color:#fff; border-color:#475569;">
+          Selesai Ujian
+        </button>
+      </div>
+    </header>
+
+    <div class="iframe-container">
+      <!-- Placeholder Google Form akan dimuat lewat JavaScript saat ujian dimulai -->
+      <iframe id="form-frame" src="about:blank" title="Lembar Soal Ujian">Memuat soal...</iframe>
+    </div>
+  </section>
+
+  <!-- 3. MODAL PERINGATAN PELANGGARAN -->
+  <div id="warning-modal" class="overlay-modal hidden">
+    <div class="modal-box">
+      <div class="icon-circle icon-warning">!</div>
+      <h2 style="color: var(--warning);">Peringatan Pelanggaran!</h2>
+      <p id="warning-reason">Anda terdeteksi meninggalkan layar ujian.</p>
+      <p style="font-weight: 700; color: var(--text);">
+        Total Pelanggaran: <span id="modal-v-count">1</span> dari <span id="modal-v-max">3</span>
+      </p>
+      <button type="button" id="btn-resume-fullscreen" class="btn btn-primary">
+        Kembali ke Layar Penuh & Lanjutkan
+      </button>
+    </div>
+  </div>
+
+  <!-- 4. LAYAR PENGUNCIAN UJIAN (JIKA PELANGGARAN MAKSIMAL) -->
+  <div id="locked-screen" class="hidden">
+    <div class="locked-card">
+      <div class="icon-circle icon-lock">✕</div>
+      <h2 style="color: var(--danger); margin-bottom: 0.4rem;">Ujian Terkunci karena Pelanggaran</h2>
+      <p style="font-size: 0.9rem; color: var(--muted);">
+        Sistem mendeteksi Anda telah mencapai batas maksimal pelanggaran (<strong id="locked-count">3/3</strong>). Silakan lapor kepada pengawas ruang.
+      </p>
+
+      <div class="log-list" id="violation-log-list">
+        <!-- Riwayat pelanggaran tercatat di sini -->
+      </div>
+
+      <div class="teacher-unlock-box">
+        <p style="font-size: 0.85rem; font-weight: 600; margin-bottom: 0.6rem;">
+          Otorisasi Pengawas / Guru
+        </p>
+        <div id="pin-error" class="error-msg hidden" style="margin-bottom: 0.6rem;">PIN Guru salah!</div>
+        <div class="form-group" style="margin-bottom: 0.75rem;">
+          <input type="password" id="teacher-pin-input" placeholder="Masukkan PIN Guru" style="text-align: center; letter-spacing: 3px;">
+        </div>
+        <button type="button" id="btn-teacher-unlock" class="btn btn-danger">
+          Reset & Buka Kunci Ujian
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * ====================================================================
+     * KONFIGURASI UJIAN (SILAKAN SESUAIKAN BAGIAN INI)
+     * ====================================================================
+     */
+    const EXAM_CONFIG = {
+      examTitle: "ASESMEN FORMATIF SPENSA",
+      // Ganti URL di bawah dengan link Embed Google Form Anda (akhiran ?embedded=true)
+      googleFormUrl: "https://docs.google.com/forms/d/e/1FAIpQLSezHFVLpojliGtx9bOY1S3RmOs8OdSCIkK9Gsi3ueDAlyEjEA/viewform?usp=dialog",
+      validTokens: ["UJIAN2026", "123456"], // Token masuk siswa (tidak peka huruf besar/kecil)
+      teacherPin: "9999",                    // PIN Guru untuk membuka kunci ujian
+      maxViolations: 3                       // Batas maksimal pelanggaran sebelum terkunci
+    };
+
+    /**
+     * ====================================================================
+     * STATE & VARIABEL SISTEM
+     * ====================================================================
+     */
+    let state = {
+      isExamActive: false,
+      isLocked: false,
+      studentName: "",
+      studentClass: "",
+      violations: 0,
+      logs: [],
+      lastViolationTime: 0
+    };
+
+    // Referensi Elemen DOM
+    const elLoginScreen = document.getElementById("login-screen");
+    const elExamScreen = document.getElementById("exam-screen");
+    const elWarningModal = document.getElementById("warning-modal");
+    const elLockedScreen = document.getElementById("locked-screen");
+    const elFormFrame = document.getElementById("form-frame");
+
+    // Inisialisasi Teks Konfigurasi Awal
+    document.getElementById("display-exam-title").textContent = EXAM_CONFIG.examTitle;
+    document.getElementById("max-v-info").textContent = EXAM_CONFIG.maxViolations;
+    document.getElementById("modal-v-max").textContent = EXAM_CONFIG.maxViolations;
+
+    /**
+     * ====================================================================
+     * 1. LOGIKA LOGIN & MULAI UJIAN
+     * ====================================================================
+     */
+    document.getElementById("login-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const nameInput = document.getElementById("student-name").value.trim();
+      const classInput = document.getElementById("student-class").value.trim();
+      const tokenInput = document.getElementById("exam-token").value.trim().toUpperCase();
+      const errorBox = document.getElementById("login-error");
+
+      if (!nameInput || !classInput || !tokenInput) {
+        showLoginError("Semua kolom wajib diisi.");
+        return;
+      }
+
+      const validList = EXAM_CONFIG.validTokens.map(t => t.toUpperCase());
+      if (!validList.includes(tokenInput)) {
+        showLoginError("Token ujian tidak valid. Periksa kembali token dari pengawas.");
+        return;
+      }
+
+      errorBox.classList.add("hidden");
+
+      // Simpan data siswa
+      state.studentName = nameInput;
+      state.studentClass = classInput;
+      state.violations = 0;
+      state.logs = [];
+      state.isLocked = false;
+
+      document.getElementById("header-name").textContent = state.studentName;
+      document.getElementById("header-class").textContent = state.studentClass;
+      updateViolationUI();
+
+      // Aktifkan Fullscreen
+      await enterFullscreen();
+
+      // Muat Google Form & Pindah Layar
+      elFormFrame.src = EXAM_CONFIG.googleFormUrl;
+      elLoginScreen.classList.add("hidden");
+      elExamScreen.classList.remove("hidden");
+
+      // Beri jeda 1.2 detik agar transisi fullscreen tidak terhitung sebagai pelanggaran
+      setTimeout(() => {
+        state.isExamActive = true;
+      }, 1200);
+    });
+
+    function showLoginError(msg) {
+      const errorBox = document.getElementById("login-error");
+      errorBox.textContent = msg;
+      errorBox.classList.remove("hidden");
+    }
+
+    /**
+     * ====================================================================
+     * 2. FUNGSI FULLSCREEN LINTAS PERANGKAT
+     * ====================================================================
+     */
+    async function enterFullscreen() {
+      const elem = document.documentElement;
+      try {
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+          if (elem.requestFullscreen) {
+            await elem.requestFullscreen();
+          } else if (elem.webkitRequestFullscreen) {
+            await elem.webkitRequestFullscreen(); // Safari / iOS tertentu
+          } else if (elem.msRequestFullscreen) {
+            await elem.msRequestFullscreen();
+          }
+        }
+      } catch (err) {
+        console.warn("Fullscreen dibatasi oleh browser perangkat ini:", err);
+      }
+    }
+
+    function isCurrentlyFullscreen() {
+      return !!(
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement
+      );
+    }
+
+    /**
+     * ====================================================================
+     * 3. DETEKSI KECURANGAN OTOMATIS
+     * ====================================================================
+     */
+    function triggerViolation(reason) {
+      if (!state.isExamActive || state.isLocked) return;
+
+      // Debounce 1.5 detik agar satu kejadian (misal blur + visibilitychange bersamaan) tidak dihitung ganda
+      const now = Date.now();
+      if (now - state.lastViolationTime < 1500) return;
+      state.lastViolationTime = now;
+
+      state.violations += 1;
+      const timeStr = new Date().toLocaleTimeString("id-ID");
+      state.logs.push(`[${timeStr}] Pelanggaran #${state.violations}: ${reason}`);
+
+      updateViolationUI();
+
+      if (state.violations >= EXAM_CONFIG.maxViolations) {
+        lockExam();
+      } else {
+        document.getElementById("warning-reason").textContent = reason;
+        document.getElementById("modal-v-count").textContent = state.violations;
+        elWarningModal.classList.remove("hidden");
+      }
+    }
+
+    function updateViolationUI() {
+      const badge = document.getElementById("violation-counter");
+      badge.textContent = `Pelanggaran: ${state.violations} / ${EXAM_CONFIG.maxViolations}`;
+      if (state.violations > 0) {
+        badge.classList.add("danger");
+      } else {
+        badge.classList.remove("danger");
+      }
+    }
+
+    // Event A: Berpindah tab atau meminimalkan browser
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        triggerViolation("Berpindah tab atau meminimalkan aplikasi browser.");
+      }
+    });
+
+    // Event B: Jendela kehilangan fokus (membuka aplikasi lain / split screen)
+    window.addEventListener("blur", () => {
+      // Catatan: Klik di dalam iframe Google Form juga memicu blur pada window induk,
+      // sehingga kita cek apakah activeElement adalah iframe. Jika BUKAN iframe, barulah pelanggaran.
+      setTimeout(() => {
+        if (document.activeElement !== elFormFrame && !document.hasFocus()) {
+          triggerViolation("Membuka jendela/aplikasi lain di luar portal ujian.");
+        }
+      }, 150);
+    });
+
+    // Event C: Keluar dari mode Fullscreen (tombol ESC atau gestur navigasi HP)
+    function handleFullscreenChange() {
+      if (state.isExamActive && !state.isLocked && !isCurrentlyFullscreen()) {
+        triggerViolation("Keluar dari mode Layar Penuh (Fullscreen).");
+      }
+    }
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+
+    // Tombol kembali ke fullscreen dari modal peringatan
+    document.getElementById("btn-resume-fullscreen").addEventListener("click", async () => {
+      elWarningModal.classList.add("hidden");
+      await enterFullscreen();
+    });
+
+    /**
+     * ====================================================================
+     * 4. PENGUNCIAN UJIAN & OTORISASI GURU
+     * ====================================================================
+     */
+    function lockExam() {
+      state.isLocked = true;
+      state.isExamActive = false;
+
+      // Sembunyikan layar ujian & modal peringatan
+      elWarningModal.classList.add("hidden");
+      elExamScreen.classList.add("hidden");
+
+      // Tampilkan detail di layar terkunci
+      document.getElementById("locked-count").textContent = `${state.violations}/${EXAM_CONFIG.maxViolations}`;
+      const logContainer = document.getElementById("violation-log-list");
+      logContainer.innerHTML = state.logs.map(item => `<div>• ${item}</div>`).join("");
+
+      document.getElementById("teacher-pin-input").value = "";
+      document.getElementById("pin-error").classList.add("hidden");
+      elLockedScreen.classList.remove("hidden");
+    }
+
+    // Buka kunci ujian dengan PIN Guru
+    document.getElementById("btn-teacher-unlock").addEventListener("click", async () => {
+      const pinInput = document.getElementById("teacher-pin-input").value.trim();
+      const pinError = document.getElementById("pin-error");
+
+      if (pinInput !== EXAM_CONFIG.teacherPin) {
+        pinError.classList.remove("hidden");
+        return;
+      }
+
+      // Reset pelanggaran & lanjutkan ujian
+      pinError.classList.add("hidden");
+      state.violations = 0;
+      state.logs = [];
+      state.isLocked = false;
+      updateViolationUI();
+
+      elLockedScreen.classList.add("hidden");
+      elExamScreen.classList.remove("hidden");
+
+      await enterFullscreen();
+      setTimeout(() => {
+        state.isExamActive = true;
+      }, 1200);
+    });
+
+    // Tombol Selesai Ujian
+    document.getElementById("btn-finish").addEventListener("click", () => {
+      const confirmExit = confirm("Pastikan Anda sudah menekan tombol KIRIM (Submit) pada Google Form sebelum keluar.\n\nApakah Anda yakin ingin mengakhiri sesi ujian?");
+      if (confirmExit) {
+        state.isExamActive = false;
+        if (document.exitFullscreen && isCurrentlyFullscreen()) {
+          document.exitFullscreen().catch(() => {});
+        }
+        elFormFrame.src = "about:blank";
+        elExamScreen.classList.add("hidden");
+        elLoginScreen.classList.remove("hidden");
+        document.getElementById("login-form").reset();
+      }
+    });
+
+    /**
+     * ====================================================================
+     * 5. PEMBLOKIRAN KLIK KANAN & PINTASAN KEYBOARD (ANTI-INSPECT/COPY)
+     * ====================================================================
+     */
+    document.addEventListener("contextmenu", (e) => {
+      e.preventDefault();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      // Blokir F12
+      if (e.key === "F12") {
+        e.preventDefault();
+      }
+      // Blokir Ctrl+Shift+I / J / C (DevTools) & Ctrl+U (View Source) & Ctrl+C / V / S / P
+      if (e.ctrlKey || e.metaKey) {
+        const forbiddenKeys = ["u", "s", "p", "c", "v", "x", "a"];
+        if (forbiddenKeys.includes(e.key.toLowerCase())) {
+          // Izinkan ketik/tempel hanya di halaman login atau input PIN guru
+          const activeTag = document.activeElement.tagName.toLowerCase();
+          if (activeTag !== "input") {
+            e.preventDefault();
+          }
+        }
+        if (e.shiftKey && ["i", "j", "c"].includes(e.key.toLowerCase())) {
+          e.preventDefault();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
